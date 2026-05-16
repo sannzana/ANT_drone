@@ -180,68 +180,64 @@ test_detection_comparison.csv</code></pre>
 <p>
 The <code>test_detection_comparison.csv</code> file compares normal YOLO, class-aware hybrid detection, and always tiled YOLO using human count, car count, and inference time.
 </p>
-<h2><strong>Task-03: Human & Car Detection with Human Counting</strong></h2>
+<h2><strong>Task-04: Optional Creative Improvement</strong></h2>
 
-<h3><strong>Detection Approach</strong></h3>
+<h3><strong>Class-Aware Hybrid Detection</strong></h3>
 
 <p>
-After training, the saved YOLO model <code>best.pt</code> was loaded and used for inference on test images. The system detects two classes:
+Instead of using only normal YOLO detection, a class-aware hybrid detection method was implemented as a creative improvement. The validation result showed that car detection was stronger than human detection. Therefore, the system handles cars and humans differently.
 </p>
 
-<pre><code>0: human
-1: car</code></pre>
+<pre><code>Cars:
+    detected mainly using normal YOLO
+
+Humans:
+    detected using normal YOLO + tiled YOLO
+
+Final step:
+    merge boxes using Non-Maximum Suppression</code></pre>
 
 <p>
-For each test image, the model predicts bounding boxes, confidence scores, and class IDs. The bounding boxes are drawn on the image, and the detected class name and confidence score are displayed beside each box.
+This approach was used because cars are larger and easier to detect in aerial images, while humans are often very small. Tiled detection helps improve the chance of detecting small humans.
 </p>
 
-<h3><strong>Human and Car Counting</strong></h3>
+<h3><strong>Tiled YOLO Detection</strong></h3>
 
 <p>
-The counting logic is simple. After detection, the system checks the class ID of every predicted bounding box.
+Tiled detection splits the input image into smaller overlapping sections. YOLO is then applied to each tile separately. The detected boxes are mapped back to the original image and merged using Non-Maximum Suppression.
 </p>
 
-<pre><code>If class_id == 0:
-    human_count += 1
-
-If class_id == 1:
-    car_count += 1</code></pre>
+<pre><code>Input image
+→ Split into overlapping tiles
+→ Run YOLO on each tile
+→ Convert tile boxes back to original image coordinates
+→ Apply NMS
+→ Show final boxes and counts</code></pre>
 
 <p>
-The final output image displays both the bounding boxes and the total count.
+The tiled YOLO output was saved separately to compare its behavior with normal YOLO detection.
 </p>
 
-<pre><code>Humans: X | Cars: Y</code></pre>
-
-<h3><strong>Generated Detection Outputs</strong></h3>
+<h3><strong>Crowd Density Heatmap</strong></h3>
 
 <p>
-The following output folders were generated during testing:
+A crowd density heatmap was also added as an extra visualization feature. It uses the center point of detected human bounding boxes and creates a heatmap to show crowded areas.
 </p>
 
-<pre><code>test_output_1_normal_yolo
-test_output_2_class_aware_hybrid
-test_output_3_always_tiled_yolo
-test_output_4_density_heatmap</code></pre>
+<pre><code>Detected human boxes
+→ Extract human center points
+→ Apply heatmap generation
+→ Overlay heatmap on original image</code></pre>
 
 <p>
-The normal YOLO output shows standard full-image detection. The class-aware hybrid output is used as the main final method. The always-tiled YOLO output is included for comparison.
+This feature is useful for drone-based crowd monitoring, public safety analysis, rescue operations, and surveillance. It does not replace object detection, but it gives an additional visual understanding of human concentration in the scene.
 </p>
 
-<h3><strong>Saved Count Files</strong></h3>
+<h3><strong>Object Tracking Note</strong></h3>
 
 <p>
-The human and car counts were saved in CSV files:
+Full object tracking using ByteTrack, DeepSORT, BoT-SORT, or OC-SORT was not included in the final submitted test pipeline. Instead, the project focuses on detection, human counting, tiled small-object detection, class-aware hybrid detection, and crowd density visualization.
 </p>
-
-<pre><code>test_normal_counts.csv
-test_hybrid_counts.csv
-test_tiled_counts.csv
-test_density_counts.csv
-test_detection_comparison.csv</code></pre>
-
-<p>
-The <code>test_detection_comparison.csv</code> file compares normal YOLO, class-aware hybrid detection, and always tiled YOLO using human count, car count, and inference time.
 </p>
 <h3><strong>Optional ByteTrack Tracking</strong></h3>
 
