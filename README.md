@@ -115,3 +115,148 @@ Overall mAP50-95: 0.4505
 
 Human mAP50: 0.602
 Car mAP50: 0.822</code></pre>
+
+
+<h2><strong>Task-03: Human & Car Detection with Human Counting</strong></h2>
+
+<h3><strong>Detection Approach</strong></h3>
+
+<p>
+After training, the saved YOLO model <code>best.pt</code> was loaded and used for inference on test images. The system detects two classes:
+</p>
+
+<pre><code>0: human
+1: car</code></pre>
+
+<p>
+For each test image, the model predicts bounding boxes, confidence scores, and class IDs. The bounding boxes are drawn on the image, and the detected class name and confidence score are displayed beside each box.
+</p>
+
+<h3><strong>Human and Car Counting</strong></h3>
+
+<p>
+The counting logic is simple. After detection, the system checks the class ID of every predicted bounding box.
+</p>
+
+<pre><code>If class_id == 0:
+    human_count += 1
+
+If class_id == 1:
+    car_count += 1</code></pre>
+
+<p>
+The final output image displays both the bounding boxes and the total count.
+</p>
+
+<pre><code>Humans: X | Cars: Y</code></pre>
+
+<h3><strong>Generated Detection Outputs</strong></h3>
+
+<p>
+The following output folders were generated during testing:
+</p>
+
+<pre><code>test_output_1_normal_yolo
+test_output_2_class_aware_hybrid
+test_output_3_always_tiled_yolo
+test_output_4_density_heatmap</code></pre>
+
+<p>
+The normal YOLO output shows standard full-image detection. The class-aware hybrid output is used as the main final method. The always-tiled YOLO output is included for comparison.
+</p>
+
+<h3><strong>Saved Count Files</strong></h3>
+
+<p>
+The human and car counts were saved in CSV files:
+</p>
+
+<pre><code>test_normal_counts.csv
+test_hybrid_counts.csv
+test_tiled_counts.csv
+test_density_counts.csv
+test_detection_comparison.csv</code></pre>
+
+<p>
+The <code>test_detection_comparison.csv</code> file compares normal YOLO, class-aware hybrid detection, and always tiled YOLO using human count, car count, and inference time.
+</p>
+<h2><strong>Task-03: Human & Car Detection with Human Counting</strong></h2>
+
+<h3><strong>Detection Approach</strong></h3>
+
+<p>
+After training, the saved YOLO model <code>best.pt</code> was loaded and used for inference on test images. The system detects two classes:
+</p>
+
+<pre><code>0: human
+1: car</code></pre>
+
+<p>
+For each test image, the model predicts bounding boxes, confidence scores, and class IDs. The bounding boxes are drawn on the image, and the detected class name and confidence score are displayed beside each box.
+</p>
+
+<h3><strong>Human and Car Counting</strong></h3>
+
+<p>
+The counting logic is simple. After detection, the system checks the class ID of every predicted bounding box.
+</p>
+
+<pre><code>If class_id == 0:
+    human_count += 1
+
+If class_id == 1:
+    car_count += 1</code></pre>
+
+<p>
+The final output image displays both the bounding boxes and the total count.
+</p>
+
+<pre><code>Humans: X | Cars: Y</code></pre>
+
+<h3><strong>Generated Detection Outputs</strong></h3>
+
+<p>
+The following output folders were generated during testing:
+</p>
+
+<pre><code>test_output_1_normal_yolo
+test_output_2_class_aware_hybrid
+test_output_3_always_tiled_yolo
+test_output_4_density_heatmap</code></pre>
+
+<p>
+The normal YOLO output shows standard full-image detection. The class-aware hybrid output is used as the main final method. The always-tiled YOLO output is included for comparison.
+</p>
+
+<h3><strong>Saved Count Files</strong></h3>
+
+<p>
+The human and car counts were saved in CSV files:
+</p>
+
+<pre><code>test_normal_counts.csv
+test_hybrid_counts.csv
+test_tiled_counts.csv
+test_density_counts.csv
+test_detection_comparison.csv</code></pre>
+
+<p>
+The <code>test_detection_comparison.csv</code> file compares normal YOLO, class-aware hybrid detection, and always tiled YOLO using human count, car count, and inference time.
+</p>
+<h3><strong>Optional ByteTrack Tracking</strong></h3>
+
+<p>
+As an additional bonus feature, ByteTrack tracking was added at the end of the pipeline. Since object tracking works better on video or continuous frames, a short video was created from sequential test images. The trained YOLO model was then used with ByteTrack to assign a unique track ID to the same human or car across frames. This helps identify whether an object appearing in multiple frames is the same object, which can reduce repeated counting in video-based monitoring.
+</p>
+
+<pre><code>Sequential test images
+→ Create short video
+→ Run YOLO + ByteTrack
+→ Assign track IDs
+→ Save tracking output</code></pre>
+
+<p>
+The tracking result is saved in:
+</p>
+
+<pre><code>test_output_5_bytetrack_tracking</code></pre>
